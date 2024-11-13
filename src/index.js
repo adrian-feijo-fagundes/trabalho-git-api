@@ -7,8 +7,20 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+const User = require('./models/User');
 app.get('/', (req, res) => {
-  res.send('API E-commerce');
+    res.send('API E-commerce');
+});
+
+app.post('/register', (req, res) => {
+  const { name, email, password } = req.body;
+  User.create(name, email, password, (err, userId) => {
+    if (err) {
+      res.status(500).json({ error: 'Erro ao registrar usuário' });
+    } else {
+      res.status(201).json({ message: 'Usuário registrado', userId });
+    }
+  });
 });
 
 app.listen(PORT, () => {
